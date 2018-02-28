@@ -225,16 +225,18 @@ def jsons_for_several_lists_of_doc_objects(lists,
             list_cpts = list_cpts[::-1]
             most_prominent_labels = [x[0] for x in list_cpts[:2]]
 
-
-            cpt_weights_sorted = list(to_cpw.values())
-            if len(cpt_weights_sorted) < num_cpts_per_topic:
+            if num_cpts_per_topic < 0:
                 cpt_weight_threshold = min(cpt_weights_sorted)
             else:
-                cpt_weights_sorted.sort()
-                cpt_weights_sorted = cpt_weights_sorted[::-1]
-                cpt_weight_threshold = cpt_weights_sorted[
-                    num_cpts_per_topic - 1]
-            cpt_weight_threshold = min(cpt_weights_sorted)
+                cpt_weights_sorted = list(to_cpw.values())
+                if len(cpt_weights_sorted) < num_cpts_per_topic:
+                    cpt_weight_threshold = min(cpt_weights_sorted)
+                else:
+                    cpt_weights_sorted.sort()
+                    cpt_weights_sorted = cpt_weights_sorted[::-1]
+                    cpt_weight_threshold = cpt_weights_sorted[
+                        num_cpts_per_topic - 1]
+
             good_cpts = {x for x, v in to_cpw.items()
                          if (v >= cpt_weight_threshold or x in prev_good_cpts)}
 
