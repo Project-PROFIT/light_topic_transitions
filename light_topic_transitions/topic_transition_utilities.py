@@ -7,12 +7,12 @@
 """
 
 import numpy as np
+import optimization_topic_matching as otm
 from sklearn.decomposition import NMF
 from sklearn.decomposition import TruncatedSVD as SVD
-import datetime
 
-import matrix_decomposition_utils as mdu
-import optimization_topic_matching as otm
+from light_topic_transitions import matrix_decomposition_utils as mdu
+
 
 def decompose_into_topics(document_concept_matrix,
                           k_estimator=mdu.estimate_k_singular,

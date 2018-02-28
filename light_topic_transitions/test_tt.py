@@ -6,9 +6,10 @@
         http://ceur-ws.org/Vol-1923/article-06.pdf
 """
 
-import topic_transition_calculator as ttc
-import random as ran
 import datetime
+import random as ran
+
+from light_topic_transitions import topic_transition_calculator as ttc
 
 
 class sample_object:
@@ -18,7 +19,7 @@ class sample_object:
 
 # Generate artificial data  ---------------------
 
-num_lists = 15
+num_lists = 25
 num_objs_per_list = 170
 mean_cpts_per_obj = 25
 p_id = "profit"

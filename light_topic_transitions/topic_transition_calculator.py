@@ -6,10 +6,10 @@
         http://ceur-ws.org/Vol-1923/article-06.pdf
 """
 
-import json
 import numpy as np
 import topic_transition_utilities as ttu
-import matrix_decomposition_utils as mdu
+
+from light_topic_transitions import matrix_decomposition_utils as mdu
 
 
 def read_matrix_for_list_of_objects(list_of_objects,
