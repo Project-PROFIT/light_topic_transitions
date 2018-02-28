@@ -7,7 +7,7 @@
 """
 
 import numpy as np
-import optimization_topic_matching as otm
+import light_topic_transitions.optimization_topic_matching as otm
 from sklearn.decomposition import NMF
 from sklearn.decomposition import TruncatedSVD as SVD
 

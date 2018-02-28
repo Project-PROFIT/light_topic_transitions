@@ -7,10 +7,7 @@
 """
 
 import numpy as np
-import scipy.spatial.distance as spdist
 from scipy.optimize import fmin_l_bfgs_b
-# import matplotlib.pyplot as plt
-# import plotly.plotly as py
 
 import sklearn.decomposition.nmf as sknmf
 

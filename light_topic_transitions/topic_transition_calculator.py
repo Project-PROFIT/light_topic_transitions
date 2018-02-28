@@ -7,7 +7,7 @@
 """
 
 import numpy as np
-import topic_transition_utilities as ttu
+import light_topic_transitions.topic_transition_utilities as ttu
 
 from light_topic_transitions import matrix_decomposition_utils as mdu
 
