@@ -18,8 +18,8 @@ class sample_object:
 
 # Generate artificial data  ---------------------
 
-num_lists = 5
-num_objs_per_list = 120
+num_lists = 15
+num_objs_per_list = 170
 mean_cpts_per_obj = 25
 p_id = "profit"
 prefix = "http://pro.fit/"
@@ -32,7 +32,7 @@ whole_vocab, whole_labels = ttc.fetch_whole_vocab(p_id,
                                                   prefix,
                                                   path="./")
 
-whole_vocab = whole_vocab[1:300]
+whole_vocab = whole_vocab[1:100]
 whole_labels = {x:whole_labels[x] for x in whole_vocab}
 lists = []
 for i in range(num_lists):
@@ -53,5 +53,9 @@ js = ttc.jsons_for_several_lists_of_doc_objects(lists,
                                                 dates=dates)
 
 
+
+import json;
+fn = "../topic_visualization/martins/json/response_2010-03-01_to_2011-02-07.json";
+json.dump(js, open(fn, "wt"))
 
 

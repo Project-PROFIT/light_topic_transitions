@@ -106,8 +106,8 @@ def tt_for_several_lists_of_doc_objects(lists, whole_vocab):
 
     for i in range(len(lists)-1):
         print("\nTT:", i)
-        l1 = lists[1]
-        l2 = lists[2]
+        l1 = lists[i]
+        l2 = lists[i+1]
         tdm, tm, tcm = tt_from_2_lists_of_doc_objects(l1, l2,
                                                       whole_vocab=whole_vocab)
         topic_document_matrices.append(tdm[0])
@@ -124,7 +124,7 @@ def jsons_for_several_lists_of_doc_objects(lists,
                                            project_id=None,
                                            prefix=None,
                                            path="./",
-                                           num_topics_per_week=10,
+                                           num_topics_per_week=25,
                                            num_cpts_per_topic=10,
                                            new_thrs=0.2,
                                            dates=None,
@@ -167,10 +167,13 @@ def jsons_for_several_lists_of_doc_objects(lists,
     for i, tm in enumerate(tms):
         all_good_cpts = set()
         new_good_topics = set()
-
-        this_tdm = tdms[i]
+        this_tdm = tdms[i+1]
+        this_tcm = tcms[i+1]
+        prev_tm = tms[i - 1] if i > 0 else np.zeros((tm.shape[0],
+                                                     tm.shape[0]))
         top_doc_m = np.zeros_like(this_tdm)
         top_doc_m[np.nonzero(this_tdm)] = 1
+
 
         # ------ Find the topics to be exported --------------------------------
         topic_weights = top_doc_m.mean(axis=0).tolist()
@@ -184,9 +187,9 @@ def jsons_for_several_lists_of_doc_objects(lists,
                 num_topics_per_week - 1]
 
         good_topic_pairs = [(tnu, topic_weights[tnu])
-                            for tnu in range(tm.shape[0]) if
+                            for tnu in range(tm.shape[1]) if
                             (topic_weights[tnu] >= topic_weight_threshold)
-                            or np.argmax(tm[tnu, :]) in prev_good_topics]
+                            or np.argmax(tm[:, tnu]) in prev_good_topics]
 
         print(len(good_topic_pairs), "Good Topics! ")
         if len(good_topic_pairs) > num_topics_per_week + 2:
@@ -198,12 +201,14 @@ def jsons_for_several_lists_of_doc_objects(lists,
             # print(">removed topics*", weight_thrs, good_weights)
         else:
             good_topics = [x for (x, y) in good_topic_pairs]
+        good_topics = [i for i in range(tm.shape[1])]
         print(len(good_topics), "Good Left! ")
         topic_list = []
 
+        # These are the topics for this time point
         for tnu in range(tm.shape[1]):
-            to_cpw = {whole_vocab[i]: tm[i, tnu]
-                      for i in np.nonzero(tm[:, tnu])[0]}
+            to_cpw = {whole_vocab[i]: this_tcm[tnu, i]
+                      for i in np.nonzero(this_tcm[tnu, :])[0]}
             if tnu not in good_topics:
                 continue
 
@@ -218,6 +223,7 @@ def jsons_for_several_lists_of_doc_objects(lists,
             list_cpts = list_cpts[::-1]
             most_prominent_labels = [x[0] for x in list_cpts[:2]]
 
+
             cpt_weights_sorted = list(to_cpw.values())
             if len(cpt_weights_sorted) < num_cpts_per_topic:
                 cpt_weight_threshold = min(cpt_weights_sorted)
@@ -226,6 +232,7 @@ def jsons_for_several_lists_of_doc_objects(lists,
                 cpt_weights_sorted = cpt_weights_sorted[::-1]
                 cpt_weight_threshold = cpt_weights_sorted[
                     num_cpts_per_topic - 1]
+            cpt_weight_threshold = min(cpt_weights_sorted)
             good_cpts = {x for x, v in to_cpw.items()
                          if (v >= cpt_weight_threshold or x in prev_good_cpts)}
 
@@ -233,7 +240,6 @@ def jsons_for_several_lists_of_doc_objects(lists,
             all_good_cpts = all_good_cpts | good_cpts
 
             topic_dict = {'topic_id': str(tnu),
-                          'most_similar_in_previous': str(most_similar),
                           'weight': topic_weights[tnu],
                           'cpts': {whole_labels[x]: to_cpw[x]
                                    for x in good_cpts},
@@ -241,6 +247,8 @@ def jsons_for_several_lists_of_doc_objects(lists,
                           + "_"
                           + ";".join(most_prominent_labels)
                           }
+            if i >= 0:
+                topic_dict['most_similar_in_previous'] = str(most_similar)
             topic_list.append(topic_dict)
 
         tm2 = tm.copy()
