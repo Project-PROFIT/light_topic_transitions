@@ -45,6 +45,8 @@ def read_matrix_for_list_of_objects(list_of_objects,
 
     for doc_num, sri in enumerate(list_of_objects):
         cpt_count_dict = sri.__dict__[cpts_key]
+        if not cpt_count_dict:
+            continue
         for this_URI, count in cpt_count_dict.items():
             matrix[doc_num, concept_uri_to_id[this_URI]] = count
 
