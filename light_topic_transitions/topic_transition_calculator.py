@@ -130,6 +130,7 @@ def jsons_for_several_lists_of_doc_objects(lists,
                                            num_cpts_per_topic=10,
                                            new_thrs=0.2,
                                            dates=None,
+                                           n_in_label=2
                                            ):
     """
     :param lists: is a list of lists of object.
@@ -223,7 +224,7 @@ def jsons_for_several_lists_of_doc_objects(lists,
                          for x, v in to_cpw.items()]
             list_cpts.sort(key=lambda x: x[1])
             list_cpts = list_cpts[::-1]
-            most_prominent_labels = [x[0] for x in list_cpts[:2]]
+            most_prominent_labels = [x[0] for x in list_cpts[:n_in_label]]
 
             if num_cpts_per_topic < 0:
                 cpt_weight_threshold = min(cpt_weights_sorted)
