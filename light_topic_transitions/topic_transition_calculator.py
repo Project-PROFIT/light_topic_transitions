@@ -123,9 +123,8 @@ def tt_for_several_lists_of_doc_objects(lists, whole_vocab):
 
 
 def jsons_for_several_lists_of_doc_objects(lists,
-                                           project_id=None,
-                                           prefix=None,
-                                           path="./",
+                                           whole_vocab,
+                                           whole_labels,
                                            num_topics_per_week=25,
                                            num_cpts_per_topic=10,
                                            new_thrs=0.2,
@@ -157,10 +156,6 @@ def jsons_for_several_lists_of_doc_objects(lists,
         transitions between consecutive lists in :param lists: Can be serialized
         using json.dump
     """
-
-    whole_vocab, whole_labels = fetch_whole_vocab(project_id,
-                                                  prefix,
-                                                  path=path)
 
     tdms, tms, tcms = tt_for_several_lists_of_doc_objects(lists, whole_vocab)
 

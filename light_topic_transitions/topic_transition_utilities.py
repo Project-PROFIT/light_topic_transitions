@@ -12,6 +12,9 @@ from sklearn.decomposition import NMF
 from sklearn.decomposition import TruncatedSVD as SVD
 
 from light_topic_transitions import matrix_decomposition_utils as mdu
+from urllib.parse import quote
+
+
 
 
 def decompose_into_topics(document_concept_matrix,
